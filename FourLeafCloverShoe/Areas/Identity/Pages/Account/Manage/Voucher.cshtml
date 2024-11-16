@@ -1,0 +1,111 @@
+﻿@page
+@model FourLeafCloverShoe.Areas.Identity.Pages.Account.Manage.VoucherModel
+@using FourLeafCloverShoe.Share.Models
+<div style="width:100%; height:100%; display:flex; text-align:center; justify-content:center; align-items:center; flex-wrap:wrap; padding:20px">
+    <div style="width:100%; height:80px; margin-top:30px">
+        <div>
+            <div>
+                <form method="post">
+                    <div class="form-group" style="display: flex; align-items: center;">
+                        @if ((int)ViewData["type"] == 0)
+                        {
+                            <select id="status" name="type" class="form-control" style="width: 200px; margin-right: 10px;">
+                                <option value="0" selected>Vouchers Của bạn</option>
+                                <option value="1">Vouchers chưa sử dụng</option>
+                                <option value="2">Vouchers đã sử dụng</option>
+                            </select>
+                        }else if ((int)ViewData["type"] == 1)
+                        {
+                            <select id="status" name="type" class="form-control" style="width: 200px; margin-right: 10px;">
+                                <option value="0" >Vouchers Của bạn</option>
+                                <option value="1" selected>Vouchers chưa sử dụng</option>
+                                <option value="2">Vouchers đã sử dụng</option>
+                            </select>
+                        }else
+                        {
+                            <select id="status" name="type" class="form-control" style="width: 200px; margin-right: 10px;">
+                                <option value="0">Vouchers Của bạn</option>
+                                <option value="1" >Vouchers chưa sử dụng</option>
+                                <option value="2" selected>Vouchers đã sử dụng</option>
+                            </select>
+                        }
+                        @if (ViewData["search"] != null)
+                        {
+                            <input type="text" name="search" value="@ViewData["search"]" placeholder="Search..." style="width: 200px;margin-right: 10px;padding: 7px; flex-grow: 1;"></input>
+                        }
+                        else
+
+                        {
+                            <input type="text" name="search"  placeholder="Search..." style="width: 200px;margin-right: 10px;padding: 7px; flex-grow: 1;"></input>
+                        }
+                        <button type="submit" style="width: 30px;margin-right: 10px;padding: 7px; flex-grow: 1;">Tìm kiếm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div style="margin-top:30px">
+            @if (TempData["Userlogin"] == null)
+            {
+                if (TempData["Novoucher"] != null)
+                {
+                    <h3 style="text-align:center; align-items:center; height:100vh; padding-top:5%">@TempData["Novoucher"]</h3>
+                }
+                else
+                {
+                    @if (Model != null && Model.ListVoucher.Count() > 0)
+                    {
+
+                        <div class="voucher-container" style="display:flex">
+                            @foreach (var item in Model.ListVoucher)
+                            {
+                                <div style="margin-bottom:8px; margin-right:8px" class="col-sm-4 ">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Mã: @item.VoucherCode</h5>
+                                            <p class="card-text">Tên voucher: @item.Title</p>
+                                            <p class="card-text">Ngày bắt đầu: @item.StartDate</p>
+                                            <p class="card-text">Ngày kết thúc: @item.EndDate</p>
+
+                                   @*          <p class="card-text">
+                                                @if (item.Voucher.Discount_Type == 0) // theo tiền mặt
+                                                {
+                                                <p style="color:black">Giảm @Convert.ToInt32(item.Voucher.Value).ToString("n0").Replace(',', '.') VNĐ</p>
+                                                }
+                                                else if (item.Voucher.Discount_Type == 1)
+                                                {
+                                                <p style="color:black">Giảm @item.Voucher.Value %</p>
+                                                }
+                                            </p> *@
+                                            <p style="color:red" class="card-text">Cho đơn từ: @item.MinimumOrderValue?.ToString("N0") VND</p>
+                                            @if (item.Status == 1)
+                                            {
+                                                <a href="/Product/ListProduct" class="btn btn-primary">Sử dụng</a>
+                                            }
+                                            else if (item.Status == 0)
+                                            {
+                                                <button style="color:white" class="btn btn-secondary" disabled>Đã sử dụng</button>
+
+                                           }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <h3 style="text-align:center; align-items:center; height:100vh; padding-top:5%">Bạn chưa có voucher nào cả</h3>
+                    }
+                }
+            }
+            else
+            {
+                <h3 style="text-align:center; align-items:center; height:100vh; padding-top:5%">@TempData["Userlogin"]</h3>
+            }
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,281 @@
+﻿@model X.PagedList.IPagedList<FourLeafCloverShoe.Share.Models.Product>;
+@using FourLeafCloverShoe.Share.Models
+@using X.PagedList.Mvc.Core;
+
+@{
+    ViewData["Title"] = "Home Page";
+    var bestSellingProducts = ViewBag.TopSellingProducts as IEnumerable<Product>;
+
+}
+<style>
+  
+
+    .outerHeightHeader {
+        position: absolute;
+        z-index: 999;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .main-header {
+        background: none;
+        -webkit-transition: background 0.3s ease-in-out, -webkit-box-shadow 0.3s ease-in-out;
+        transition: background 0.3s ease-in-out, -webkit-box-shadow 0.3s ease-in-out;
+        transition: background 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        transition: background 0.3s ease-in-out, box-shadow 0.3s ease-in-out, -webkit-box-shadow 0.3s ease-in-out;
+    }
+</style>
+<section class="home-slider d-none d-md-block">
+    <div class="home-slider-inner">
+        <div class="owl-carousel owl-theme owl-carousel" id="home-slider-owl">
+            <div class="home-slider-item">
+                <a href="#" class="home-slider-item-ratio">
+                    <img src="~/fileuser/img/banner3.jpg?w=1920&h=0" loading="lazy" alt="Izi">
+
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+ @if (bestSellingProducts == null || !bestSellingProducts.Any())
+    {
+<p>No products available.</p>
+    }
+    else
+    {
+@functions {
+    private decimal? GetMinPrice(IEnumerable<dynamic> productDetails)
+    {
+        return productDetails.Min(c => (decimal?)c.PriceSale);
+    }
+
+    private decimal? GetMaxPrice(IEnumerable<dynamic> productDetails)
+    {
+        return productDetails.Max(c => (decimal?)c.PriceSale);
+    }
+}
+
+    <section class="home-block-section">
+        <div class="container-fluid">
+            <div class="heading-title text-center">
+                <div class="subtitle" style="text-align: center; margin: 20px 0;">
+                    <a href="blogs.html" style="font-family: 'Wedges', sans-serif; font-size: 20px; color: #333; text-decoration: none; padding: 10px 20px; border: 2px solid #000; border-radius: 5px; transition: background-color 0.3s, color 0.3s;">
+                        <span style="color: red"> SẢN PHẨM BÁN CHẠY</span>
+                    </a>
+                </div>
+
+                <div class="home-block-section-inner">
+                    <div class="swiper-container swiper1">
+                        <div class="swiper-wrapper">
+                            @if (bestSellingProducts != null && bestSellingProducts.Any())
+                            {
+                                @foreach (var product in bestSellingProducts)
+                                {
+                                    <div class="swiper-slide">
+                                        <div class="product-grid-item">
+                                            <div class="product-grid-thumb">
+                                                <a asp-controller="Products" asp-action="ProductDetail" asp-route-productId="@product.Id" class="product-grid-image pcl-6-id-3571">
+                                                    <img class="mcl-6-id-3571" src="@product.ProductImages.First()?.ImageUrl" alt="@product.ProductName">
+                                                </a>
+                                            </div>
+                                            <a class="product-grid-info pcl-6-id-3571" href="@Url.Action("ProductDetail", "Products", new { id = product.Id })">
+                                                <div class="product-grid-info-top">
+                                                    <p class="product-grid-title" style="font-weight: bold;">
+                                                        @product.ProductName
+                                                    </p>
+                                                    <p class="product-grid-price" style="font-size: 1.5em; font-style: italic;color:red;">
+                                                        <span class="product-grid-price-new">
+                                                            @{
+                                                                var productDetails = (IEnumerable<dynamic>)product.ProductDetails;
+                                                                decimal? minPrice = GetMinPrice(productDetails);
+                                                                decimal? maxPrice = GetMaxPrice(productDetails);
+                                                            }
+                                                            @if (minPrice.HasValue && maxPrice.HasValue)
+                                                            {
+                                                                if (minPrice == maxPrice)
+                                                                {
+                                                                    <span>@minPrice.Value.ToString("N0") đ</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@minPrice.Value.ToString("N0") đ - @maxPrice.Value.ToString("N0") đ</span>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>Không có giá</span>
+                                                            }
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <!-- Add Pagination -->
+                        <div class="swiper-pagination"></div>
+                        <!-- Add Navigation -->
+                     
+                    </div>
+                </div>
+                
+            </div>
+            <div class="hr"></div>
+        </div>
+    </section>
+
+    <section class="home-block-section">
+        <div class="container-fluid">
+            <div class="heading-title text-center">
+                <div class="subtitle" style="text-align: center; margin: 20px 0;">
+                    <a href="blogs.html" style="font-family: 'Wedges', sans-serif; font-size: 20px; color: #333; text-decoration: none; padding: 10px 20px; border: 2px solid #000; border-radius: 5px; transition: background-color 0.3s, color 0.3s;">
+                        <span>Sản phẩm của chúng tôi</span>
+                    </a>
+                </div>
+
+                <div class="home-block-section-inner">
+                    <div class="swiper-container swiper2">
+                        <div class="swiper-wrapper">
+                            @foreach (var item in Model)
+                            {
+                                <div class="swiper-slide">
+                                    <div class="product-grid-item">
+                                        <div class="product-grid-thumb">
+                                            <a asp-controller="Products" asp-action="ProductDetail" asp-route-productId="@item.Id" class="product-grid-image pl-id-4198" title="@item.ProductName">
+                                                <img class="mcl-id-4198" src="@item.ProductImages.First()?.ImageUrl" alt="@item.ProductName">
+                                            </a>
+                                        </div>
+                                        <a class="product-grid-info pcl-6-id-3571" asp-controller="Products" asp-action="ProductDetail" asp-route-productId="@item.Id">
+                                            <div class="product-grid-info-top">
+                                                <p class="product-grid-title" style="font-weight: bold;">
+                                                    @item.ProductName
+                                                </p>
+                                                <p class="product-grid-price" style="font-size: 0.8em; font-style: italic; color:red;">
+                                                    <span class="product-grid-price-new">
+                                                        <span class="product-grid-price-new-text">
+                                                            @{
+                                                                var productDetails = item.ProductDetails;
+                                                                decimal? minPrice = productDetails.Min(c => c.PriceSale);
+                                                                decimal? maxPrice = productDetails.Max(c => c.PriceSale);
+                                                            }
+
+                                                            @if (minPrice.HasValue && maxPrice.HasValue)
+                                                            {
+                                                                if (minPrice == maxPrice)
+                                                                {
+                                                                    <span>@minPrice.Value.ToString("N0") đ</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@minPrice.Value.ToString("N0") đ - @maxPrice.Value.ToString("N0") đ</span>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>Không có giá</span>
+                                                            }
+                                                        </span>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <!-- Add Pagination -->
+                        <div class="swiper-pagination"></div> 
+                        <!-- Remove Navigation buttons -->
+                        <!-- <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div> -->
+                    </div>
+                </div>
+                <div class="section-view-more">
+                    <a href="/products/" class="section-view-more-link">Xem tất cả</a>
+                </div>
+            </div>
+            <div class="hr"></div>
+        </div>
+    </section>
+
+    <section class="home-block-section">
+        <div class="container-fluid">
+            <div class="heading-title text-center">
+                <div class="subtitle" style="text-align: center; margin: 20px 0;">
+                    <a href="blogs.html" style="font-family: 'Wedges', sans-serif; font-size: 1.5rem; color: #333; text-decoration: none; padding: 10px 20px; border: 2px solid #000; border-radius: 5px; transition: background-color 0.3s, color 0.3s;">
+                        <span>Bài Viết Nổi Bật</span>
+                    </a>
+                </div>
+            </div>
+            <div class="section-padding section-border-bottom">
+                <div class="home-block-section-inner post">
+                    <div class="swiper-container swiper3">
+                        <div class="swiper-wrapper">
+                            @foreach (var post in ViewBag.LatestPosts)
+                            {
+                                <div class="swiper-slide">
+                                    <div class="product-grid-item">
+                                        <div class="product-grid-thumb">
+                                            <a href="@Url.Action("show", "Post", new { id = post.Id })" class="product-grid-image pcl-6-id-3571">
+                                                <img class="mcl-6-id-3571" src="@post.TittleImage" alt="@post.Tittle">
+                                            </a>
+                                        </div>
+                                        <a class="product-grid-info pcl-6-id-3571" href="@Url.Action("show", "Post", new { id = post.Id })">
+                                            <div class="product-grid-info-top">
+                                                <p class="product-grid-title" style=" font-weight: bold;font-size: 20px;">
+                                                    @post.Tittle
+                                                </p>
+                                                <p class="product-grid-price">
+                                                    <span class="product-grid-price-new">
+                                                        <span class="product-grid-price-new-text" style="font-size: 0.8em; font-style: italic;">
+                                                            @post.CreateAt.ToString("MMMM dd, yyyy")
+                                                        </span>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <!-- Add Pagination -->
+                        <div class="swiper-pagination"></div>
+                        <!-- Add Navigation -->
+                        
+                    </div>
+                </div>
+                <div class="section-view-more text-center mt-4">
+                    <a href="/post/index/" class="section-view-more-link">Xem tất cả</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    }
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var swiperOptions = {
+                loop: true,
+                slidesPerView: 4,
+                spaceBetween: 20,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            };
+            new Swiper('.swiper1', swiperOptions);
+            new Swiper('.swiper2', swiperOptions);
+            new Swiper('.swiper3', swiperOptions);
+        });
+    </script>
+
+

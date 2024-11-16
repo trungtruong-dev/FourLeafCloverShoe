@@ -1,0 +1,1896 @@
+﻿@{
+    Layout = "~/Areas/Admin/Shared/_LayoutBanTaiQuay.cshtml";
+}
+<style>
+    .dropdown-menu {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    #searchResults {
+        width: 100%;
+    }
+
+    .product-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .product-image {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+        border-radius: 50%;
+    }
+
+    .tabs {
+        display: flex;
+        align-items: center;
+    }
+
+    .tab {
+        background-color: transparent;
+        border: none;
+        border-radius: solid 1px;
+        cursor: pointer;
+        outline: none;
+        padding: 10px 20px;
+        margin-right: 10px;
+        position: relative;
+        transition: background-color 0.3s;
+    }
+
+        .tab:hover {
+            background-color: #f0f0f0;
+        }
+
+        .tab.active {
+            border-bottom: 2px solid blue;
+            background-color: #04A9F5;
+            color: white;
+        }
+
+    .tab-close {
+        margin-left: 5px;
+        cursor: pointer;
+    }
+
+        .tab-close:hover {
+            color: red;
+        }
+
+    .tab-add {
+        margin-right: 5px;
+    }
+
+    .tabs {
+        display: flex;
+        align-items: center;
+        overflow-x: auto; /* Thêm thanh cuộn ngang */
+        white-space: nowrap; /* Ngăn chặn các tab từ việc chuyển xuống dòng tiếp theo */
+    }
+
+    div:focus {
+        outline: none !important;
+    }
+
+    /*! CSS Used from: Embedded */
+    .MuiTypography-root {
+        margin: 0;
+    }
+
+    .MuiTypography-body1 {
+        font-size: 1rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-weight: 400;
+        line-height: 1.5;
+    }
+
+    .MuiTypography-h4 {
+        font-size: 1.5rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-weight: 500;
+        line-height: 1.235;
+    }
+
+    .MuiTypography-h5 {
+        font-size: 1.25rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-weight: 500;
+        line-height: 1.334;
+    }
+
+    .MuiTypography-h6 {
+        font-size: 1.125rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-weight: 500;
+        line-height: 1.6;
+    }
+
+    /*! CSS Used from: Embedded */
+    .MuiTouchRipple-root {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 0;
+        overflow: hidden;
+        position: absolute;
+        border-radius: inherit;
+        pointer-events: none;
+    }
+
+    /*! CSS Used from: Embedded */
+    .MuiButtonBase-root {
+        color: inherit;
+        border: 0;
+        cursor: pointer;
+        margin: 0;
+        display: inline-flex;
+        outline: 0;
+        padding: 0;
+        position: relative;
+        align-items: center;
+        user-select: none;
+        border-radius: 0;
+        vertical-align: middle;
+        -moz-appearance: none;
+        justify-content: center;
+        text-decoration: none;
+        background-color: transparent;
+        -webkit-appearance: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /*! CSS Used from: Embedded */
+    .MuiButton-root {
+        color: #111111;
+        height: 36px;
+        padding: 6px 16px;
+        font-size: 0.875rem;
+        min-width: 85px;
+        box-sizing: border-box;
+        transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-weight: 500;
+        line-height: 1;
+        border-radius: 10px;
+        text-transform: uppercase;
+    }
+
+        .MuiButton-root:hover {
+            text-decoration: none;
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+
+    @@media (hover: none) {
+        .MuiButton-root:hover {
+            background-color: transparent;
+        }
+    }
+
+    .MuiButton-label {
+        width: 100%;
+        display: inherit;
+        font-size: 1rem;
+        align-items: inherit;
+        text-transform: none;
+        justify-content: inherit;
+    }
+
+    .MuiButton-text {
+        padding: 6px 8px;
+    }
+
+    /*! CSS Used from: Embedded */
+    .MuiIconButton-root {
+        flex: 0 0 auto;
+        color: #111111;
+        padding: 12px;
+        overflow: visible;
+        font-size: 1rem;
+        text-align: center;
+        transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        border-radius: 50%;
+    }
+
+        .MuiIconButton-root:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+
+    @@media (hover: none) {
+        .MuiIconButton-root:hover {
+            background-color: transparent;
+        }
+    }
+
+    .MuiIconButton-label {
+        width: 100%;
+        display: flex;
+        align-items: inherit;
+        justify-content: inherit;
+    }
+
+    /*! CSS Used from: Embedded */
+    .MuiSvgIcon-root {
+        fill: currentColor;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        font-size: 1.5rem;
+        transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        flex-shrink: 0;
+        user-select: none;
+    }
+
+    /*! CSS Used from: Embedded */
+    .MuiDialogContent-root {
+        flex: 1 1 auto;
+        padding: 8px 24px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /*! CSS Used from: Embedded */
+    .jss6153 {
+        padding: 16px 16px 0;
+    }
+
+    /*! CSS Used from: Embedded */
+    .jss6152 {
+        padding: 16px 16px 0;
+    }
+
+    /*! CSS Used from: Embedded */
+    .MuiInputBase-root {
+        color: #111111;
+        cursor: text;
+        display: inline-flex;
+        position: relative;
+        font-size: 16px;
+        box-sizing: border-box;
+        align-items: center;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-weight: 400;
+        line-height: 1.1876em;
+    }
+
+    .MuiInputBase-input {
+        font: inherit;
+        color: currentColor;
+        width: 100%;
+        border: 0;
+        height: 1.1876em;
+        margin: 0;
+        display: block;
+        padding: 6px 0 10px;
+        min-width: 0;
+        background: none;
+        box-sizing: content-box;
+        animation-name: mui-auto-fill-cancel;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+        .MuiInputBase-input:focus {
+            outline: 0;
+        }
+
+        .MuiInputBase-input:invalid {
+            box-shadow: none;
+        }
+
+    /*! CSS Used from: Embedded */
+    .MuiInput-root {
+        position: relative;
+    }
+
+    .MuiInput-underline:after {
+        left: 0;
+        right: 0;
+        bottom: 0;
+        content: "";
+        position: absolute;
+        transform: scaleX(0);
+        transition: transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+        border-bottom: 2px solid #0964CF;
+        pointer-events: none;
+    }
+
+    .MuiInput-underline:before {
+        left: 0;
+        right: 0;
+        bottom: 0;
+        content: "\00a0";
+        position: absolute;
+        transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        border-bottom: 1px solid #cfd5df;
+        pointer-events: none;
+    }
+
+    .MuiInput-underline:hover:not(.Mui-disabled):before {
+        border-bottom: 2px solid rgba(0, 0, 0, 0.87);
+    }
+
+    @@media (hover: none) {
+        .MuiInput-underline:hover:not(.Mui-disabled):before {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+        }
+    }
+
+    /*! CSS Used from: Embedded */
+    .MuiFormControl-root {
+        border: 0;
+        margin: 0;
+        display: inline-flex;
+        padding: 0;
+        position: relative;
+        min-width: 0;
+        flex-direction: column;
+        vertical-align: top;
+    }
+
+    /*! CSS Used from: Embedded */
+    .MuiSelect-root {
+        color: #111111;
+    }
+
+    .MuiSelect-select {
+        cursor: pointer;
+        min-width: 16px;
+        user-select: none;
+        border-radius: 0;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+    }
+
+        .MuiSelect-select:focus {
+            border-radius: 0;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .MuiSelect-select.MuiSelect-select {
+            padding-right: 24px;
+        }
+
+    .MuiSelect-selectMenu {
+        height: auto;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .MuiSelect-icon {
+        top: calc(50% - 12px);
+        color: #8797AF;
+        right: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+
+    /*! CSS Used from: Embedded */
+    .jss5651 {
+        font-size: 1rem;
+    }
+
+    .jss5652 {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    /*! CSS Used from: Embedded */
+    .MuiToggleButton-root {
+        color: rgba(0, 0, 0, 0.38);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        height: 48px;
+        padding: 0px 12px;
+        font-size: 0.875rem;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-weight: 500;
+        line-height: 1.75;
+        border-radius: 4px;
+        text-transform: uppercase;
+    }
+
+        .MuiToggleButton-root.Mui-selected {
+            color: rgba(0, 0, 0, 0.54);
+            background-color: rgba(0, 0, 0, 0.12);
+        }
+
+        .MuiToggleButton-root:hover {
+            text-decoration: none;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+    @@media (hover: none) {
+        .MuiToggleButton-root:hover {
+            background-color: transparent;
+        }
+    }
+
+    .MuiToggleButton-root.Mui-selected:hover {
+        background-color: rgba(0, 0, 0, 0.15);
+    }
+
+    .MuiToggleButton-root.Mui-selected + .MuiToggleButton-root.Mui-selected {
+        border-left: 0;
+        margin-left: 0;
+    }
+
+    .MuiToggleButton-label {
+        width: 100%;
+        display: inherit;
+        align-items: inherit;
+        justify-content: inherit;
+    }
+
+    /*! CSS Used from: Embedded */
+    .jss6163 {
+        color: #0F1824;
+        width: 133px;
+        border: 1px solid #F3F4F5;
+        height: 42px;
+        margin: 0 12px 15px !important;
+        padding: 6px 8px;
+        position: relative;
+        box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.161);
+        border-radius: 5px;
+        background-color: #F3F4F5;
+    }
+
+        .jss6163 .MuiToggleButton-label {
+            display: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1;
+            text-transform: none;
+        }
+
+        .jss6163 svg {
+            display: none;
+        }
+
+        .jss6163:hover {
+            color: #0964CF;
+            border: 1px solid !important;
+            background: #fff;
+            border-color: #0964CF;
+        }
+
+        .jss6163.Mui-selected {
+            color: #0964CF;
+            border: 1px solid !important;
+            background: #fff;
+            border-color: #0964CF;
+        }
+
+            .jss6163.Mui-selected svg {
+                right: 0;
+                bottom: 0;
+                display: block;
+                position: absolute;
+            }
+
+    /*! CSS Used from: Embedded */
+    .jss6170 {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+    }
+
+    /*! CSS Used from: Embedded */
+    .jss5968 {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+        .jss5968:nth-child(2) {
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+        }
+
+    .jss5970 {
+        padding: 20px 16px;
+        border-top: 1px solid #e5e5e5;
+        margin-left: -16px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .jss5971 {
+        margin: 0 -12px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: start;
+    }
+
+    .jss5972 {
+        width: 100%;
+    }
+
+    .jss5974 {
+        width: calc(100% - 40px);
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+    }
+
+    .jss5975 {
+        padding: 0px 0px 12px 0px;
+        border-bottom: 1px solid #DFE4E8;
+        margin-bottom: 16px;
+    }
+
+    .jss5976 {
+        font-weight: 500;
+    }
+
+    /*! CSS Used from: Embedded */
+    *,
+    *::before,
+    *::after {
+        box-sizing: inherit;
+    }
+</style>
+
+
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title h4" id="exampleModalFullscreenLabel">Thanh toán đơn hàng </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div class="modal-body">
+                <div class="MuiDialogContent-root jss6153 jss6152">
+                    <div class="MuiFormControl-root jss5968" style="padding-bottom: 20px;">
+                        <h5 class="MuiTypography-root MuiTypography-h5">Khách phải trả</h5>
+                        <h4 class="MuiTypography-root MuiTypography-h4" style="color: rgb(9, 100, 207);" id="totalAmount1">0</h4>
+                    </div>
+                    <div class="MuiBox-root jss6162 jss5971">
+                        <button class="MuiButtonBase-root MuiToggleButton-root jss6163"
+                                tabindex="0" type="button" value="3500022" aria-pressed="false" id="tienMat"
+                                name="buttonPayment">
+                            <span class="MuiToggleButton-label">
+                                <div class="MuiBox-root jss6164"> Tiền mặt</div>
+                                <svg class="MuiSvgIcon-root" focusable="false"
+                                     viewBox="0 0 24 24" aria-hidden="true" style="right: -2px; bottom: -1px;">
+                                    <path d="M1 23.5911L21.9645 1V16.5322C21.9645 20.4307 19.0317 23.5911 15.4139 23.5911H1Z"
+                                          fill="currentColor"></path>
+                                    <path d="M13.1347 19.0351L11.2841 17.1669C11.0291 16.9094 10.6172 16.9094 10.3622 17.1669C10.1071 17.4244 10.1071 17.8403 10.3622 18.0976L12.9058 20.6658C13.0366 20.7978 13.2393 20.7978 13.3701 20.6658L19.1504 14.8299C19.4055 14.5724 19.4055 14.1565 19.1504 13.899C18.8955 13.6416 18.4835 13.6416 18.2285 13.899L13.1347 19.0351Z"
+                                          fill="white"></path>
+                                </svg>
+                            </span><span class="MuiTouchRipple-root"></span>
+                        </button><button class="MuiButtonBase-root MuiToggleButton-root jss6163" tabindex="0" type="button"
+                                         value="3500023" aria-pressed="true" id="chuyenKhoan" name="buttonPayment">
+                            <span class="MuiToggleButton-label">
+                                <div class="MuiBox-root jss6166"> Chuyển khoản</div>
+                                <svg class="MuiSvgIcon-root" focusable="false"
+                                     viewBox="0 0 24 24" aria-hidden="true" style="right: -2px; bottom: -1px;">
+                                    <path d="M1 23.5911L21.9645 1V16.5322C21.9645 20.4307 19.0317 23.5911 15.4139 23.5911H1Z"
+                                          fill="currentColor"></path>
+                                    <path d="M13.1347 19.0351L11.2841 17.1669C11.0291 16.9094 10.6172 16.9094 10.3622 17.1669C10.1071 17.4244 10.1071 17.8403 10.3622 18.0976L12.9058 20.6658C13.0366 20.7978 13.2393 20.7978 13.3701 20.6658L19.1504 14.8299C19.4055 14.5724 19.4055 14.1565 19.1504 13.899C18.8955 13.6416 18.4835 13.6416 18.2285 13.899L13.1347 19.0351Z"
+                                          fill="white"></path>
+                                </svg>
+                            </span><span class="MuiTouchRipple-root"></span>
+                        </button>
+
+                    </div>
+                    <div class="MuiBox-root jss6169 jss5970">
+                    
+                    </div>
+                    <div class="MuiFormControl-root jss5968" style="padding-top: 20px; padding-bottom: 20px; font-weight: 500;">
+                        <h5 class="MuiTypography-root MuiTypography-h5">Tiền khách đưa</h5>
+                        <h4 class="MuiTypography-root MuiTypography-h4" id="moneyGiven1">0</h4>
+                    </div>
+                    <div class="MuiFormControl-root jss5968" style="padding-bottom: 10px;">
+                        <p class="MuiTypography-root MuiTypography-body1">Tiền thừa trả khách</p>
+                        <p class="MuiTypography-root MuiTypography-body1" id="tienThua"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="CheckOutMultiPayment">Thanh toán</button>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerModalLabel">Đăng kí khách hàng mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Họ và tên</label>
+                        <input type="text" class="form-control" id="fullName1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Số điện thoại</label>
+                        <input type="tel" class="form-control" id="phoneNumber1" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="register">Đăng kí</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="cameraModal" tabindex="-1" aria-labelledby="cameraModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cameraModalLabel">Chọn camera</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <select id="cameraSelect" class="form-select"></select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="applyCamera">Áp dụng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="searchInput" placeholder="Nhập tên sản phẩm..." autocomplete="off">
+            <button class="btn btn-outline-success">
+                <span title="Tìm kiếm bằng QR Code" style="float:left">
+                    <a href="javascript:;" id="start" class="count-holder">
+                        <img src="~/fileuser/Assets/App/images/searchqr.png" width="25" />
+                    </a>
+                </span>
+            </button>
+
+        </div>
+        <div class="dropdown">
+            <ul class="dropdown-menu" id="searchResults" aria-labelledby="dropdownMenuButton">
+            </ul>
+        </div>
+    </div>
+    <div class=" col-md-6 ">
+        <div class="row ">
+            <div class="col">
+                <div class="tabs">
+                    <!-- Dấu + để tạo tab mới -->
+                    <button class="tab tab-add"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-sm-12">
+        <div>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane show active" id="ecomtab-1" role="tabpanel" aria-labelledby="ecomtab-tab-1">
+                <div class="row">
+                    <div class="col-xl-7 card">
+                        <div class="card">
+                            <div class="card-body p-0 table-body">
+                                <div class="table-responsive">
+                                    <table class="table mb-0" id="pc-dt-simple">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center;">Sản phẩm</th>
+                                                <th style="text-align: center;">Đơn giá</th>
+                                                <th style="text-align: center;">Số lượng</th>
+                                                <th style="text-align: center;">Tổng tiền</th>
+                                                <th style="text-align: center;">#</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="form-group row">
+                            <div class="col-lg-9">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="searchNumberPhone" placeholder="Nhập số điện thoại..." autocomplete="off">
+                                </div>
+                                <div class="dropdown">
+                                    <ul class="dropdown-menu form-control" id="searchNumberPhoneResults" aria-labelledby="dropdownMenuButton">
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <a href="#" style="margin-top:15px;" id="themKhachHang" title="Thêm khách hàng mới" class="avtar avtar-xs btn-link-danger btn-pc-default">
+                                    <i style="font-size:25px;" class="fas fa-user-plus">
+
+                                    </i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body py-2">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item px-0">
+                                        <div class="float-end">
+                                            <h5 class="mb-0" id="fullName"> Khách vãng lai</h5>
+                                        </div><span class="text-muted">Khách hàng : </span>
+                                    </li>
+                                    <li class="list-group-item px-0">
+                                        <div class="float-end">
+                                            <h5 class="mb-0" id="phoneNumber"> - </h5>
+                                        </div><span class="text-muted">SĐT : </span>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body py-2">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item px-0">
+                                        <div class="float-end">
+                                            <h5 class="mb-0" id="total"></h5>
+                                        </div><span class="text-muted">Tổng tiền  <input type="number" hidden id="productQuantity" /></span>
+                                    </li>
+                                    <li class="list-group-item px-0">
+                                        <span class="text-muted">Mã giảm giá </span>
+                                        <div class="float-end">
+                                            <select id="discount-select" class="form-control shadow-none border-1">
+                                            </select>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item px-0">
+                                        <div class="float-end">
+                                            <div class="MuiFormControl-root MuiTextField-root" inputmode="numeric" style="width: calc(100% - 40px);">
+                                                <div class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl">
+                                                    <input aria-invalid="false" autocomplete="off" type="number" value="0" min="0" id="coinsUsed" class="MuiInputBase-input MuiInput-input" value="0" style="text-align: right;">
+                                                </div>
+                                            </div>
+                                        </div><span class="text-muted">Xu sử dụng <br /> (<span id="coins">0</span>)</span>
+                                    </li>
+                                    <li class="list-group-item px-0">
+                                        <div>
+                                            <div class="float-end">
+                                                - <span class="text-muted" id="spanGiamGia">0 đ </span>
+                                            </div><span class="text-muted">Giảm Voucher </span>
+                                        </div>
+                                        <div>
+                                            <div class="float-end">
+                                                - <span class="text-muted" id="spanGiamGiaCoins"> 0 đ </span>
+                                            </div><span class="text-muted">Giảm xu </span>
+                                        </div>
+                                        <div>
+                                            <div class="float-end">
+                                                + <span class="text-muted" id="xuTichDuoc"> 0 xu </span>
+                                            </div><span class="text-muted">Xu tích được:  </span>
+                                        </div>
+
+                                        <div>
+                                            <div class="float-end">
+                                                <h5 class="mb-0" id="totalAmount"></h5>
+                                            </div>
+                                            <h5 class="mb-0 d-inline-block">Khách phải trả</h5>
+                                        </div>
+
+                                    </li>
+
+
+                                    <li class="list-group-item px-0">
+                                        <div>
+                                            <div class="float-end">
+                                                    <div class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl">
+                                                        <input aria-invalid="false" autocomplete="off" type="number" value="0" min="0" id="moneyGiven"  class="MuiInputBase-input MuiInput-input" value="0" style="text-align: right;">
+                                                    </div>
+                                            </div><span class="text-muted">Tiền khách đưa: </span>
+                                        </div>
+                                        <div>
+                                            <div>
+                                                <select id="paymentType" class="shadow-none border-0">
+                                                    <option value="off" selected>Tiền mặt</option>
+                                                    <option value="momo">Momo QR</option>
+                                                    <option value="vnpay">VNPay</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item px-0">
+                                        <div class="float-end">
+                                            <h5 class="mb-0" id="tienThuaTraKhach">0 đ</h5>
+                                        </div><h5 class="mb-0 d-inline-block">Tiền thừa trả khách: </h5>
+                                    </li>
+
+                                </ul>
+                                <hr />
+                                <div class="d-grid mb-3 row">
+                                    <div>
+                                        <button class="btn btn-outline-danger" id="huyDon">Huỷ đơn</button>
+                                        <button class="btn btn-primary col-md-7 float-end" id="checkOut">Thanh toán</button>
+                                    </div>
+
+
+                                </div>
+
+
+
+                            </div>
+                            <button class="btn btn-outline-primary" id="btnPaymentMulti">Hình thức thanh toán khác</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <!-- [ sample-page ] end -->
+</div>
+<input type="text" id="orderIdInput" hidden />
+<video id="video" width="300" height="200" autoplay hidden></video>
+
+<!-- [ Main Content ] end -->
+<script src="~/fileadmin/assets/js/plugins/choices.min.js"></script>
+<script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+    let tabs = [];
+    let lastTab;
+    let totalAmount = 0;
+    let coinUsed = 0;
+    let myCoins = 0;
+    let voucherValue = 0;
+    let voucherId = "";
+    let total = 0;
+    let tienHang = 0;
+    let tienKhachDua=0;
+    let tienThua = 0;
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Admin/BanTaiQuay/GetPendingOrders',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                data.forEach(function (orderId) {
+                    const newTabIndex = tabs.length ? Math.max(...tabs) + 1 : 1;
+                    tabs.push(newTabIndex);
+                    const newTab = $('<button></button>').addClass('tab').text('Đơn ' + newTabIndex);
+                    newTab.append('<span class="tab-close"><i class="fas fa-times-circle"></i></span>');
+                    newTab.data('orderId', orderId);
+                    $(newTab).insertBefore('.tab-add');
+                    setActiveTab(newTab);
+                    lastTab = newTab;
+                    $('.tabs').scrollLeft($('.tabs')[0].scrollWidth);
+                });
+                // Nếu có tab, gán và click vào tab đầu tiên
+                if (tabs.length > 0) {
+                    const firstTab = $('.tab:not(.tab-add)').first();
+                    setActiveTab(firstTab);
+                    $("#orderIdInput").val(firstTab.data('orderId'));
+                    loadDataUserOrder($("#orderIdInput").val());
+                    updateTable();
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        if (tabs.length === 0) { // tự động click vào tạo tab mới nếu chưa có đơn nào
+            $('.tab-add').click();
+            // Gán orderId của tab mới vào #orderIdInput
+            $("#orderIdInput").val($('.tab.active').data('orderId'));
+            updateTable();
+        }
+        // thanh toan
+
+        // Gắn sự kiện cho input search
+        $('#searchInput').on('input', function (event) {
+            var searchTerm = event.target.value;
+            search(searchTerm);
+        });
+        // Gắn sự kiện cho input search
+        $('#searchNumberPhone').on('input', function (event) {
+            var searchTerm = event.target.value;
+            searchNumberPhone(searchTerm);
+        });
+        connection.on("ReceiveNotification", (message, status) => {
+            showToast(message, status);
+            var orderId = $("#orderIdInput").val();
+            $.ajax({
+                url: '/order/ExportPDF',
+                type: 'GET',
+                data: {
+                    orderId: orderId,
+
+                },
+                success: function (result) {
+
+                }
+            });
+
+            loadDataUserOrder($("#orderIdInput").val());
+        });
+        $('#checkOut').on('click', function () {
+            if (totalAmount > $("#moneyGiven").val()) {
+                showToast("Vui lòng nhập số tiền khách trả!", false);
+            } else {
+                var paymentType = $("#paymentType").val();
+                var orderId = $("#orderIdInput").val();
+                var voucherId = $("#discount-select").val();
+                $.ajax({
+                    url: '/Admin/BanTaiQuay/CheckOut',
+                    type: 'POST',
+                    data: {
+                        orderId: orderId,
+                        coinUsed: coinUsed,
+                        voucherValue: voucherValue,
+                        voucherId: voucherId,
+                        paymentType: paymentType
+                    },
+                    success: function (result) {
+                        if (result.isSuccess) {
+                            if (result.paymentType == "off") {
+                                showToast(result.message, result.isSuccess);
+                                $.ajax({
+                                    url: '/order/ExportPDF',
+                                    type: 'GET',
+                                    data: {
+                                        orderId: orderId,
+
+                                    },
+                                    success: function (result) {
+
+                                    }
+                                });
+                                loadDataUserOrder($("#orderIdInput").val());
+                            }
+                            else {
+                                window.open(result.url, '_blank');
+                            }
+                        } else {
+                            showToast(result.message, false);
+                        }
+                    },
+                    error: function (error) {
+                        showToast("Có lỗi xảy ra, vui lòng thử lại!", false);
+                    }
+                });
+            }
+        });
+        $('#huyDon').on('click', function () {
+            var orderId = $("#orderIdInput").val();
+            $.ajax({
+                url: '/Admin/BanTaiQuay/huyDon',
+                type: 'POST',
+                data: {
+                    orderId: orderId,
+                },
+                success: function (result) {
+                    loadDataUserOrder($("#orderIdInput").val());
+                    showToast(result.message, result.isSuccess);
+                },
+                error: function (error) {
+                    showToast("Có lỗi xảy ra, vui lòng thử lại!", false);
+                }
+            });
+        });
+        $('#themKhachHang').on('click', function () {
+            $("#registerModal").modal('show');
+        });
+        $('#register').click(function (e) {
+            var isValid = true;
+            $('#fullName1, #email, #phoneNumber1, #password').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid #FF0000",
+                        "background": "#FFCECE"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                        "background": ""
+                    });
+                }
+            });
+
+            // Xác thực số điện thoại
+            var phoneNumber = $('#phoneNumber1').val();
+            var phonePattern = /^0\d{9}$/; // Bắt đầu bằng số 0 và có tổng cộng 10 chữ số
+
+            // Xác thực email
+            var email = $('#email').val();
+            var emailPattern = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Định dạng email thông thường
+            var fullName = $('#fullName1').val();
+            if (fullName.length <= 10) {
+                isValid = false;
+                alert('Họ và tên phải có nhiều hơn 10 ký tự.');
+            }
+            else if (!phonePattern.test(phoneNumber)) {
+                isValid = false;
+                alert('Số điện thoại phải bắt đầu bằng số 0 và có tổng cộng 10 chữ số.');
+            }
+
+            else if (!emailPattern.test(email)) {
+                isValid = false;
+                alert('Email không hợp lệ.');
+            }
+            else {
+                isValid = true;
+            }
+
+            if (isValid == false)
+                e.preventDefault();
+            else {
+                $("#registerModal").modal('hide');
+                $.ajax({
+                    url: '/Admin/BanTaiQuay/Register',
+                    type: 'POST',
+                    data: {
+                        fullName: fullName,
+                        email: email,
+                        phoneNumber: phoneNumber
+                    },
+                    success: function (results) {
+                        showToast(results.message, results.isSuccess);
+                    },
+                    error: function (error) {
+                        showToast("Có lỗi xảy ra, vui lòng thử lại!", false);
+                    }
+                });
+            }
+        });
+
+
+        $('.tab-add').click(function () {
+            const newTabIndex = tabs.length ? Math.max(...tabs) + 1 : 1;
+            tabs.push(newTabIndex);
+            const newTab = $('<button></button>').addClass('tab').text('Đơn ' + newTabIndex);
+            newTab.append('<span class="tab-close"><i class="fas fa-times-circle"></i></span>');
+
+            $.ajax({
+                url: '/Admin/BanTaiQuay/CreateNewOrder',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) { // Hàm này sẽ được gọi khi yêu cầu thành công
+                    newTab.data('orderId', data.orderId); // lưu dữ liệu  data.orderId với tên orderId vào newtab
+                    $("#orderIdInput").val(newTab.data('orderId')); // gán id vào orderIdInput
+                    loadDataUserOrder($("#orderIdInput").val());
+                    updateTable();
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+            $(newTab).insertBefore('.tab-add');
+            setActiveTab(newTab); // Kích hoạt tab mới
+            lastTab = newTab;
+            $('.tabs').scrollLeft($('.tabs')[0].scrollWidth);
+        });
+
+        $(document).on('click', '.tab:not(.tab-add)', function () {
+            setActiveTab($(this));
+            $("#orderIdInput").val($(this).data('orderId')); // gán id vào orderIdInput
+            loadDataUserOrder($("#orderIdInput").val());
+            updateTable();
+        });
+
+
+        $(document).on('change', '#discount-select', function () {
+            var voucherId = $(this).val();
+            totalAmount = total - coinUsed; // reset totalAmount to original total minus coins used before applying new voucher
+            $.ajax({
+                type: "POST",
+                url: "/Admin/BanTaiQuay/ApplyVoucher",
+                data: {
+                    voucherId: voucherId
+                },
+                success: function (result) {
+                    if (result.isSuccess) {
+                        if (totalAmount == 0) {
+                            $("#discount-select").prop("selectedIndex", 0);
+                            $("#spanGiamGia").text(VoucherValue.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+                            showToast("Không thể áp dụng voucher do đơn hàng đang là 0đ!", false);
+                        }
+                        else {
+                            if (result.voucherType == 1) { // theo %
+                                var tinhtien = result.voucherValue * total / 100;
+                                voucherValue = tinhtien;
+                                if (tinhtien > result.maxDiscount) {
+                                    voucherValue = result.maxDiscount;
+                                }
+                                if (tinhtien > totalAmount) {
+                                    voucherValue = totalAmount;
+                                }
+                            }
+                            else {// theo vnd
+                                voucherValue = result.voucherValue;
+                                if (result.voucherValue > totalAmount) {
+                                    voucherValue = totalAmount;
+                                }
+                            }
+                            totalAmount -= voucherValue;
+                            tienHang = totalAmount
+                            $("#moneyGiven").val(totalAmount);
+                            $("#spanGiamGia").text(voucherValue.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+                            $("#totalAmount").text(totalAmount.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+                            $("#totalAmount1").text(totalAmount.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+                            calculateTotalMoneyGiven();
+                            voucherId = result.id;
+                            showToast("Đã áp dụng voucher", true);
+                        }
+                    } else {
+                        voucherId = "";
+                        voucherValue = 0;
+                        $("#spanGiamGia").text(voucherValue.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+                        $("#totalAmount1").text(totalAmount.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+                        $("#totalAmount").text(totalAmount.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+                        tienHang = totalAmount
+                        $("#moneyGiven").val(totalAmount);
+
+                        calculateTotalMoneyGiven();
+                        showToast("Không thể áp dụng voucher", false);
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        $(document).on('change', '#coinsUsed', function () {
+            myCoins += coinUsed || 0; // return the coins used in the previous input
+            totalAmount = total - voucherValue; // reset totalAmount to original total minus voucher used before applying new coins
+            coinUsed = parseInt($(this).val()); // Số coins mà người dụng muốn sử dụng
+
+            if (isNaN(coinUsed) || coinUsed < 0) {
+                showToast("Số xu bạn nhập không hợp lệ!", false);
+                $("#coinsUsed").val(0); // reset the input field to 0
+                coinUsed = 0;
+                return;
+            }
+            if (coinUsed > myCoins) {
+                showToast("Bạn không thể sử dụng nhiều hơn số coins bạn có!", false);
+                $("#coinsUsed").val(0); // reset the input field to 0
+                coinUsed = 0;
+                return;
+            }
+            if (coinUsed > totalAmount) {
+                showToast("Bạn không thể sử dụng coins để giảm giá đơn hàng xuống dưới 0đ!", false);
+                $("#coinsUsed").val(0); // reset the input field to 0
+                coinUsed = 0;
+                return;
+            }
+            totalAmount -= coinUsed;
+            myCoins -= coinUsed;
+            tienHang = totalAmount
+            $("#moneyGiven").val(totalAmount);
+
+            $("#spanGiamGiaCoins").text(coinUsed.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+            $("#totalAmount").text(totalAmount.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+            $("#totalAmount1").text(totalAmount.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+            $("#coins").text(myCoins.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " xu");
+            calculateTotalMoneyGiven();
+            showToast("Đã áp dụng " + coinUsed + " coins", true);
+        });
+        $(document).on('change', '#moneyGiven', function () {
+            var moneyGiven = parseInt($(this).val()); // Số tiền khách đưa
+
+            if (isNaN(moneyGiven)) {
+                alert("Vui lòng nhập một số hợp lệ!");
+                $(this).val(totalAmount); // reset the input field to totalAmount
+                return;
+            }
+            if (moneyGiven < 0) {
+                alert("Số tiền không thể là số âm!");
+                $(this).val(totalAmount); // reset the input field to totalAmount
+                return;
+            }
+            if (moneyGiven < totalAmount) {
+                alert("Số tiền bạn nhập không hợp lệ hoặc ít hơn tổng số tiền khách phải trả!");
+                $(this).val(totalAmount); // reset the input field to totalAmount
+                return;
+            }
+            var change = moneyGiven - totalAmount; // Tiền thừa trả khách
+            $("h5.mb-0:contains('0đ')").text(change.toLocaleString('en-US') + " đ");
+        });
+
+        // xoá tab
+        $(document).on('click', '.tab-close', function (event) {
+            event.stopPropagation();
+            const tabIndex = parseInt($(this).closest('.tab').text().replace('Đơn ', ''));
+            const confirmDelete = confirm('Bạn có chắc chắn muốn xoá tab này không?');
+            if (confirmDelete) {
+                const currentTab = $(this).closest('.tab');
+                const prevTab = currentTab.prev('.tab');
+                var orderId = currentTab.data('orderId');
+                $.ajax({
+                    url: '/Admin/BanTaiQuay/RemovePendingOrder',
+                    type: 'POST',
+                    data: {
+                        orderId: orderId
+                    },
+                    success: function (results) {
+
+                    }
+                });
+
+                tabs = tabs.filter(index => index !== tabIndex);
+                currentTab.remove();
+                if (tabs.length > 0) {
+                    if (prevTab.length > 0) {
+                        setActiveTab(prevTab);
+                    } else {
+                        setActiveTab($('.tab:not(.tab-add)').first());
+                    }
+                    $("#orderIdInput").val($('.tab.active').data('orderId'));
+                    loadDataUserOrder($("#orderIdInput").val());
+                    updateTable();
+                } else {
+                    $('.tab-add').click();
+                }
+            }
+        });
+
+        function setActiveTab(tab) {
+            $('.tab').removeClass('active');
+            tab.addClass('active');
+
+        }
+
+        function RemoveOrderItem(id) {// id ở đây là productdetailid
+            $.ajax({
+                type: "POST",
+                url: "/Admin/BanTaiQuay/RemoveOrderItem",
+                data: {
+                    productDetailId: id,
+                    orderId: $("#orderIdInput").val(),
+                },
+                success: function (result) {
+                    loadDataUserOrder($("#orderIdInput").val());
+                    updateTable();
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        };
+        function UpdateSL(id, newQuantity) { // id ở đây là productdetailid
+            $.ajax({
+                type: "POST",
+                url: "/Admin/BanTaiQuay/UpdateQuantity",
+                data: {
+                    productDetailId: id,
+                    orderId: $("#orderIdInput").val(),
+                    newQuantity: newQuantity
+                },
+                success: function (result) {
+
+                    showToast(result.message, result.isSuccess);
+                    loadDataUserOrder($("#orderIdInput").val());
+                    updateTable();
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        };
+        updateTable();
+
+        function updateTable() {
+            var orderId = $("#orderIdInput").val();
+
+            $.ajax({
+                url: '/Admin/BanTaiQuay/GetOrderItems',
+                type: 'POST',
+                data: {
+                    orderId: orderId
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('#pc-dt-simple tbody').empty(); // xoá tbody
+                    if (data.length === 0) {
+                        // Không có dữ liệu, hiển thị thông báo
+                        $('#pc-dt-simple tbody').append('<tr><td colspan="5" class="text-center">Chưa có sản phẩm nào trong đơn hàng</td></tr>');
+                    } else {
+                        data.forEach(function (item) {
+                            var row = $('<tr></tr>');
+
+                            // Tạo ô đầu tiên với hình ảnh và tên sản phẩm
+                            var cell1 = $('<td></td>');
+                            var media = $('<div></div>').addClass('media align-items-center');
+                            var img = $('<img>', { src: item.imageUrl, alt: 'image', class: 'bg-light wid-50 rounded' });
+                            var mediaBody = $('<div></div>').addClass('media-body ms-3');
+                            var h5 = $('<h5></h5>').addClass('mb-1').text(item.productName);
+                            var p = $('<p></p>').addClass('text-sm text-muted mb-0').text("Kích cỡ: " + item.sizeName);
+                            mediaBody.append(h5, p);
+                            media.append(img, mediaBody);
+                            cell1.append(media);
+                            row.append(cell1);
+
+                            // Tạo ô thứ hai với giá sản phẩm
+                            var cell2 = $('<td></td>').addClass('text-end');
+                            var h5Price = $('<h5></h5>').addClass('mb-0').text(item.price.toLocaleString("en-US", { minimumFractionDigits: 0 }) + " đ");
+                            // var spanPrice = $('<span></span>').addClass('text-sm text-muted text-decoration-line-through').text('$129.99');
+                            cell2.append(h5Price/* , spanPrice */);
+                            row.append(cell2);
+
+                            // Tạo ô thứ ba với nút tăng/giảm số lượng
+                            var cell3 = $('<td></td>').addClass('text-center');
+                            var divGroup = $('<div></div>').addClass('btn-group btn-group-sm mb-2 border').attr('role', 'group');
+                            var btnMinus = $('<button></button>').attr('type', 'button').addClass('btn btn-link-secondary').html('<i class="ti ti-minus"></i>').on('click', function () {
+                                // xử lí sự kiện click giảm số lượng
+                                var newQuantity = item.quantity - 1;
+                                if (newQuantity < 1) {
+                                    return;
+                                }
+                                UpdateSL(item.id, newQuantity);
+                            });
+                            var inputNumber = $('<input>').addClass('wid-50 text-center border-0 m-0 form-control rounded-0 shadow-none').attr('type', 'text').attr('id', 'number').val(item.quantity).on('change', function () {
+                                // Xử lý sự kiện onchange khi change số lượng
+                                UpdateSL(item.id, $(this).val());
+                                console.log('Số lượng đã thay đổi: ' + $(this).val());
+                            });
+                            var btnPlus = $('<button></button>').attr('type', 'button').addClass('btn btn-link-secondary').html('<i class="ti ti-plus"></i>').on('click', function () {
+                                // xử lí sự kiện click tăng số lương
+                                var newQuantity = item.quantity + 1;
+                                UpdateSL(item.id, newQuantity);
+                            });
+                            divGroup.append(btnMinus, inputNumber, btnPlus);
+                            cell3.append(divGroup);
+                            row.append(cell3);
+
+                            // Tạo ô thứ tư với tổng giá
+                            var cell4 = $('<td></td>').addClass('text-end');
+                            var h5Total = $('<h5></h5>').addClass('mb-0').text(item.total.toLocaleString("en-US", { minimumFractionDigits: 0 }) + " đ");
+                            cell4.append(h5Total);
+                            row.append(cell4);
+
+                            // Tạo ô thứ năm với nút xóa
+                            var cell5 = $('<td></td>').addClass('text-end');
+                            var aDelete = $('<a></a>').attr('href', '#').addClass('avtar avtar-s btn-link-danger btn-pc-default').html('<i class="ti ti-trash f-18"></i>').on('click', function () {
+                                RemoveOrderItem(item.id);
+                                console.log('Nút xoá đã được nhấp!');
+                            });
+                            cell5.append(aDelete);
+                            row.append(cell5);
+                            $('#pc-dt-simple tbody').append(row);
+                        });
+                    }
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        };
+        function loadDataUserOrder(orderId) {
+            $("#checkOut").attr('disabled', false);
+            $("#checkOut").text("Thanh toán");
+            $("#checkOut").attr('hidden', false);
+            $("#huyDon").text("Huỷ đơn");
+            $("#huyDon").attr('hidden', false);
+            $("#huyDon").attr('disabled', false);
+            $("#moneyGiven").attr('readonly', false);
+            $("#coinsUsed").attr('readonly', false);
+            $("#discount-select").attr('disabled', false);
+            $("#paymentType").attr('disabled', false);
+            $.ajax({
+                type: "GET",
+                url: "/Admin/BanTaiQuay/loadDataUserOrder",
+                data: {
+                    orderId: orderId
+                },
+                success: function (result) {
+                    totalAmount = result.total - voucherValue - coinUsed;
+                    myCoins = result.coins;
+                    total = result.total;
+                    var xuTichDuoc = Math.round(total / 100);
+                    if (result.orderStatus == 1) { // thanh toán thành công
+                        $("#checkOut").attr('disabled', true);
+                        $("#checkOut").text("Đã thanh toán");
+                        $(".tab.active").css({
+                            "background-color": "#1DE9B6",
+                            "color": "white"
+                        });
+                        $("#huyDon").attr('hidden', true);
+                        $("#huyDon").attr('disabled', true);
+                        $("#btnPaymentMulti").attr('hidden', true);
+                        $("#btnPaymentMulti").attr('disabled', true);
+                        $("#moneyGiven").attr('readonly', true);
+                        $("#coinsUsed").attr('readonly', true);
+                        $("#discount-select").attr('disabled', true);
+                        $("#paymentType").attr('disabled', true);
+
+                    }
+                    if (result.orderStatus == 13) {  // huỷ đơn
+                        $("#checkOut").attr('disabled', true);
+                        $("#checkOut").attr('hidden', true);
+                        $(".tab.active").css({
+                            "background-color": "#F0C2C3",
+                            "color": "white"
+                        });
+                        $("#huyDon").attr('disabled', true);
+                        $("#huyDon").text("Đơn hàng đã huỷ");
+                        $("#btnPaymentMulti").attr('hidden', true);
+                        $("#btnPaymentMulti").attr('disabled', true);
+                        $("#moneyGiven").attr('readonly', true);
+                        $("#coinsUsed").attr('readonly', true);
+                        $("#discount-select").attr('disabled', true);
+                        $("#paymentType").attr('disabled', true);
+                    }
+                    if (result.phoneNumber == "") {
+                        xuTichDuoc = 0;
+                    }
+                    $("#fullName").text(result.fullName);
+                    $("#phoneNumber").text(result.phoneNumber);
+                    $("#searchNumberPhone").val(result.phoneNumber);
+                    $("#coins").text(result.coins.toLocaleString("en-US", { minimumFractionDigits: 0 }) + " xu");
+                    $("#total").text(result.total.toLocaleString("en-US", { minimumFractionDigits: 0 }) + " đ");
+                    $("#xuTichDuoc").text(xuTichDuoc.toLocaleString("en-US", { minimumFractionDigits: 0 }) + " xu");
+                    $("#productQuantity").val(result.productQuantity).change();
+
+                    $("#totalAmount").text(totalAmount.toLocaleString("en-US", { minimumFractionDigits: 0 }) + " đ");
+                    $("#totalAmount1").text(totalAmount.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+                    tienHang = totalAmount
+                    $("#moneyGiven").val(totalAmount);
+
+                    calculateTotalMoneyGiven();
+                    $('#discount-select').empty();
+                    $('#discount-select').append('<option value="">-- Chọn mã giảm giá --</option>');
+                    // Thêm các option mới từ dữ liệu trả về
+                    $.each(result.lstVoucher, function (index, item) {
+                        $('#discount-select').append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        };
+        $(document).on('change', '#productQuantity', function () {
+            // Reset the voucher
+            voucherId = "";
+            voucherValue = 0;
+
+            // Reset the coins used
+            myCoins += coinUsed || 0; // return the coins used in the previous input
+            coinUsed = 0;
+            $("#coinsUsed").val(0); // reset the input field to 0
+
+            // Recalculate the total amount
+            totalAmount = total - coinUsed - voucherValue;
+
+            // Update the display
+            $("#discount-select").prop("selectedIndex", 0);
+            $("#spanGiamGia").text(voucherValue.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+            $("#totalAmount").text(totalAmount.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+            $("#spanGiamGiaCoins").text(coinUsed.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+        });
+
+        function searchNumberPhone(term) {
+            $.ajax({
+                url: '/Admin/BanTaiQuay/GetPhoneNumbers',
+                type: 'GET',
+                success: function (data) {
+                    var searchResultsElement = $('#searchNumberPhoneResults');
+                    searchResultsElement.empty();
+
+                    if (term.length > 0) {
+                        var found = false;
+                        data.forEach(function (result) {
+                            // $.each(data, function (index, result) {
+                            if (result.text.toLowerCase().includes(term.toLowerCase())) {
+                                var resultElement = $('<li></li>').addClass('dropdown-item form-control');
+                                var productItem = $('<div></div>').addClass('media-body ms-3');
+                                var productName = $('<h5></h5>').addClass('mb-1').text(result.text);
+                                // var pElement = $('<p></p>').addClass('text-sm text-muted mb-0').text('Tên KH: Trung ' );
+                                // productName.append(pElement);
+                                productItem.append(productName);
+                                resultElement.append(productItem);
+                                resultElement.on('click', function () {
+                                    var orderId = $("#orderIdInput").val();
+                                    $('#searchNumberPhone').val(result.text);
+                                    searchResultsElement.hide();
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Admin/BanTaiQuay/AddUserToOrder",
+                                        data: {
+                                            userId: result.value,
+                                            orderId: orderId
+                                        },
+                                        success: function (results) {
+                                            console.log(results);
+                                            loadDataUserOrder($("#orderIdInput").val());
+                                            updateTable();
+                                        },
+                                        error: function (error) {
+                                            console.log(error);
+                                        }
+                                    });
+                                });
+
+                                searchResultsElement.append(resultElement);
+                                found = true;
+                            }
+                        });
+
+                        if (!found) {
+                            var notFoundElement = $('<li></li>').addClass('dropdown-item text-muted').text('Không tìm thấy khách hàng').css('text-align', 'center');
+                            searchResultsElement.append(notFoundElement);
+                        }
+
+                        searchResultsElement.show();
+                    } else {
+                        searchResultsElement.hide();
+                    }
+                }
+            });
+        };
+
+
+        function search(term) {
+            $.ajax({
+                url: '/Admin/BanTaiQuay/GetProductDetails',
+                type: 'GET',
+                success: function (results) {
+                    var searchResultsElement = $('#searchResults');
+                    searchResultsElement.empty();
+
+                    if (term.length > 0) {
+                        var found = false;
+                        results.forEach(function (result) {
+                            if (result.productName.toLowerCase().includes(term.toLowerCase())) {
+                                var liElement = $('<li></li>').addClass('dropdown-item form-control').data('productDetailId', result.id);
+                                var statusSp = "";
+                                if (result.status) {
+                                    statusSp = "đang bán";
+                                } else {
+                                    statusSp = "ngừng bán";
+                                    liElement.css('background-color', '#F0B4B8');
+                                }
+                                var divMedia = $('<div></div>').addClass('media align-items-center');
+
+                                var imgElement = $('<img>', {
+                                    src: result.imageUrl,
+                                    alt: 'image',
+                                    class: 'bg-light wid-50 rounded'
+                                });
+
+                                var divMediaBody = $('<div></div>').addClass('media-body ms-3');
+
+                                var h5Element = $('<h5></h5>').addClass('mb-1').text(result.productName);
+
+                                var formattedPrice = result.price.toLocaleString("en-US", { minimumFractionDigits: 0 }) + " đ";
+                                var pElement = $('<p></p>').addClass('text-sm text-muted mb-0').text('Kích cỡ: ' + result.sizeName + ' | Đơn giá: ' + formattedPrice + ' | Tồn kho: ' + result.quantity + ' | Trạng thái: ' + statusSp);
+
+                                divMediaBody.append(h5Element, pElement);
+                                divMedia.append(imgElement, divMediaBody);
+                                liElement.append(divMedia);
+                                liElement.on('click', function () {
+                                    // Xử lý sự kiện click ở đây
+                                    var productDetailId = $(this).data('productDetailId');
+                                    var orderId = $("#orderIdInput").val();
+                                    $.ajax({
+                                        url: '/Admin/BanTaiQuay/AddProductDetailToOrder',
+                                        type: 'POST',
+                                        data: {
+                                            productDetailId: productDetailId,
+                                            orderId: orderId
+                                        },
+                                        success: function (results) {
+                                            $("#searchInput").val("");
+                                            $('#searchResults').hide();
+                                            loadDataUserOrder($("#orderIdInput").val());
+                                            updateTable();
+                                            showToast(results.message, results.isSuccess);
+                                        }
+                                    });
+                                });
+                                searchResultsElement.append(liElement);
+                                found = true;
+                            }
+                        });
+
+                        if (!found) {
+                            var notFoundElement = $('<li></li>').addClass('dropdown-item text-muted').text('Không tìm thấy sản phẩm').css('text-align', 'center');
+                            searchResultsElement.append(notFoundElement);
+                        }
+
+                        searchResultsElement.show();
+                    } else {
+                        searchResultsElement.hide();
+                    }
+                }
+            });
+        };
+
+
+        const video = $('#video')[0];
+        let scanning = false;
+        let scanner = new Instascan.Scanner({ video: video, refractoryPeriod: 1500 }); // set thời gian quét  mã qr giống nhau là 1.5s
+        scanner.addListener('scan', function (content) {
+            var productDetailId = content;
+            var orderId = $("#orderIdInput").val();
+            $.ajax({
+                url: '/Admin/BanTaiQuay/AddProductDetailToOrder',
+                type: 'POST',
+                data: {
+                    productDetailId: productDetailId,
+                    orderId: orderId
+                },
+                success: function (results) {
+
+                    loadDataUserOrder($("#orderIdInput").val());
+                    updateTable();
+                    showToast(results.message, results.isSuccess);
+                }
+            });
+        });
+        let cameras;
+        $('#start').click(function () {
+            if (!scanning) {
+                Instascan.Camera.getCameras().then(function (availableCameras) {
+                    cameras = availableCameras;
+                    if (cameras.length > 0) {
+                        var select = $('#cameraSelect');
+                        select.empty();
+                        $.each(cameras, function (i, camera) {
+                            select.append($('<option/>', { value: camera.id, text: camera.name }));
+                        });
+                        $('#cameraModal').modal('show');
+                        $('.modal-backdrop').remove();
+                        $('body').removeClass('modal-open');
+                    } else {
+                        console.error('Không tìm thấy camera.');
+                    }
+                }).catch(function (e) {
+                    alert('Error accessing camera: ' + e);
+                });
+            } else {
+                stopScanning();
+                video.hidden = true;
+            }
+        });
+        $('#applyCamera').click(function () {
+            var selectedCameraId = $('#cameraSelect').val();
+            $('#cameraModal').modal('hide');
+            video.play();
+            video.hidden = false;
+            scanning = true;
+            var selectedCamera = $.grep(cameras, function (camera) { return camera.id === selectedCameraId; })[0];
+            scanner.start(selectedCamera);
+            showToast("Bật camera", true);
+        });
+        function stopScanning() {
+            scanning = false;
+            video.pause();
+            showToast("Tắt camera", true);
+            if (video.srcObject) {
+                $.each(video.srcObject.getTracks(), function (i, track) {
+                    track.stop();
+                });
+            }
+        }
+
+        const container = $('.MuiBox-root.jss6169.jss5970'); // Chọn phần tử chứa
+        const additionalDivTemplate = `
+          <div class="MuiBox-root jss6193">
+            <div class="MuiBox-root jss6194 jss6170">
+              <div class="MuiInputBase-root MuiInput-root MuiInput-underline jss5651" style="width: 45%;">
+                <div class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu jss5652 MuiInputBase-input MuiInput-input" tabindex="0" role="button" aria-haspopup="listbox">
+                  {button_text}
+                </div>
+                <svg class="MuiSvgIcon-root MuiSelect-icon" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                </svg>
+              </div>
+              <div class="MuiBox-root jss6195" style="width: 40%; display: flex; align-items: flex-end; justify-content: space-between;">
+                <div class="MuiFormControl-root MuiTextField-root" inputmode="numeric" style="width: calc(100% - 40px);">
+                  <div class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl">
+                    <input aria-invalid="false" autocomplete="off" id="payment-amount" name="payment-amount" type="text" class="MuiInputBase-input MuiInput-input" value="0" style="text-align: right;">
+                  </div>
+                </div>
+                <button class="MuiButtonBase-root MuiIconButton-root jss6171" tabindex="0" type="button" style="margin-right: -10px;">
+                   <span class="MuiIconButton-label"><svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 11 13" aria-hidden="true" style="width: 14px; height: 14px;">
+                        <path fill="currentColor" d="M6.58036 10.5625H7.16964C7.24779 10.5625 7.32273 10.5304 7.37799 10.4733C7.43324 10.4161 7.46429 10.3386 7.46429 10.2578V4.77344C7.46429 4.69263 7.43324 4.61513 7.37799 4.55799C7.32273 4.50085 7.24779 4.46875 7.16964 4.46875H6.58036C6.50221 4.46875 6.42727 4.50085 6.37201 4.55799C6.31676 4.61513 6.28571 4.69263 6.28571 4.77344V10.2578C6.28571 10.3386 6.31676 10.4161 6.37201 10.4733C6.42727 10.5304 6.50221 10.5625 6.58036 10.5625ZM10.6071 2.03125H8.58368L7.74886 0.591602C7.64409 0.411078 7.49589 0.261699 7.31869 0.15802C7.14149 0.0543416 6.94134 -0.000100125 6.73775 1.38238e-07H4.26225C4.05874 -1.24102e-05 3.85869 0.054471 3.68159 0.158145C3.50448 0.26182 3.35635 0.411152 3.25163 0.591602L2.41632 2.03125H0.392857C0.288665 2.03125 0.18874 2.07405 0.115065 2.15024C0.0413902 2.22642 0 2.32976 0 2.4375L0 2.84375C0 2.95149 0.0413902 3.05483 0.115065 3.13101C0.18874 3.2072 0.288665 3.25 0.392857 3.25H0.785714V11.7812C0.785714 12.1045 0.909885 12.4145 1.13091 12.643C1.35193 12.8716 1.65171 13 1.96429 13H9.03571C9.34829 13 9.64806 12.8716 9.86909 12.643C10.0901 12.4145 10.2143 12.1045 10.2143 11.7812V3.25H10.6071C10.7113 3.25 10.8113 3.2072 10.8849 3.13101C10.9586 3.05483 11 2.95149 11 2.84375V2.4375C11 2.32976 10.9586 2.22642 10.8849 2.15024C10.8113 2.07405 10.7113 2.03125 10.6071 2.03125ZM4.21929 1.29264C4.23242 1.27004 4.25099 1.25135 4.2732 1.2384C4.29541 1.22545 4.32049 1.21868 4.34598 1.21875H6.65402C6.67947 1.21872 6.7045 1.22551 6.72666 1.23846C6.74882 1.25141 6.76736 1.27007 6.78047 1.29264L7.20917 2.03125H3.79083L4.21929 1.29264ZM9.03571 11.7812H1.96429V3.25H9.03571V11.7812ZM3.83036 10.5625H4.41964C4.49779 10.5625 4.57273 10.5304 4.62799 10.4733C4.68324 10.4161 4.71429 10.3386 4.71429 10.2578V4.77344C4.71429 4.69263 4.68324 4.61513 4.62799 4.55799C4.57273 4.50085 4.49779 4.46875 4.41964 4.46875H3.83036C3.75221 4.46875 3.67727 4.50085 3.62201 4.55799C3.56676 4.61513 3.53571 4.69263 3.53571 4.77344V10.2578C3.53571 10.3386 3.56676 10.4161 3.62201 10.4733C3.67727 10.5304 3.75221 10.5625 3.83036 10.5625Z">
+                        </path>
+                      </svg></span>
+                  <span class="MuiTouchRipple-root"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        $('.jss6163').click(function () {
+            const button = $(this);
+            button.toggleClass('Mui-selected');
+
+            // Update aria-pressed attribute
+            button.attr('aria-pressed', button.hasClass('Mui-selected'));
+
+            if (button.hasClass('Mui-selected')) {
+                const buttonText = button.find('.MuiBox-root').text().trim();
+                const additionalDiv = $(additionalDivTemplate.replace('{button_text}', buttonText));
+                const buttonId = button.attr('id'); // Lấy ID của nút
+                // Đặt ID cho ô input dựa trên ID của nút
+                additionalDiv.find('input[name="payment-amount"]').attr('id', `payment-amount-${buttonId}`);
+
+                container.append(additionalDiv);
+                // Lấy giá trị từ input "tongtien"
+                const tongTienValue = totalAmount
+
+                // Tìm phần tử input đầu tiên trong phần tử nhập tiền tự tạo
+                const firstPaymentInput = container.find('.jss6193:first-child input[name="payment-amount"]');
+
+                // Đặt giá trị cho ô input đầu tiên
+                if (firstPaymentInput.length > 0) {
+                    firstPaymentInput.val(tongTienValue);
+                }
+
+            } else {
+                container.find('.jss6193:contains("' + button.find('.MuiBox-root').text().trim() + '")').remove();
+            }
+            calculateTotalMoneyGiven();
+
+        });
+
+        // Xử lý sự kiện click cho nút "x" (delete)
+        $(document).on('click', '.MuiButtonBase-root.MuiIconButton-root.jss6171', function () {
+            const parentDiv = $(this).closest('.jss6193');
+            const buttonText = parentDiv.find('.MuiSelect-select').text().trim();
+
+            // Find the corresponding button and deselect it
+            $('.jss6163:contains("' + buttonText + '")').removeClass('Mui-selected').attr('aria-pressed', 'false');
+
+            // Remove the entire row
+            parentDiv.remove();
+            calculateTotalMoneyGiven();
+        });
+        // Lắng nghe sự kiện input trên các ô nhập tiền
+        container.on('input', 'input[name="payment-amount"]', function () {
+            calculateTotalMoneyGiven();
+        });
+
+        // Hàm tính toán tổng số tiền khách đưa
+        function calculateTotalMoneyGiven() {
+            let total = 0;
+            // Lặp qua tất cả các input có name="payment-amount"
+            $('input[name="payment-amount"]').each(function () {
+                const inputValue = parseFloat($(this).val()) || 0;
+                total += inputValue;
+            });
+            tienKhachDua = total;
+            tienThua = tienHang - tienKhachDua;
+
+            // Cập nhật tổng số tiền vào input "moneyGiven"
+            $('#moneyGiven1').text(total.toLocaleString("en-US", { minimumFractionDigits: 0 }) + " đ");
+            $('#tienThua').text(tienThua.toLocaleString("en-US", { minimumFractionDigits: 0 }) + " đ");
+                
+        }
+        $('#btnPaymentMulti').on('click', function () {
+            $("#paymentModal").modal('show');
+        });
+        $("#moneyGiven").on("change", function () {
+            var thienkKhachDua = $("#moneyGiven").val();
+            var tienthuatrakhach =- (tienHang - thienkKhachDua);
+            $("#tienThuaTraKhach").text(tienthuatrakhach.toLocaleString("en-US", { minimumFractionDigits: 0 }) + " đ");
+        });
+        function resetPaymentInputs() {
+            // Reset all payment method input fields
+            $('input[name="payment-amount"]').val('0');
+
+            // Reset the total money given and change amount displayed
+            $('#moneyGiven1').text("0 đ");
+            $('#tienThua').text("0 đ");
+
+            // Reset the `tienKhachDua` and `tienThua` variables
+            tienKhachDua = 0;
+            tienThua = tienHang;
+
+            // Remove any additional payment method rows
+            $('.MuiBox-root.jss6193').remove();
+
+            // Deselect all selected buttons
+            $('.jss6163').removeClass('Mui-selected').attr('aria-pressed', 'false');
+        }
+
+        $('#CheckOutMultiPayment').on('click', function () {
+            var orderId = $("#orderIdInput").val();
+            var voucherIds = $("#discount-select").val();
+            if (tienThua >0) {
+                showToast("Vui lòng nhập số tiền khách trả!", false);
+            }
+             else {
+                var valueTienMat = $('#payment-amount-tienMat').val();
+                var valueChuyenKhoan = $('#payment-amount-chuyenKhoan').val();
+                if (typeof valueTienMat === 'undefined' || valueTienMat === null) {
+                    valueTienMat = "0";
+                }
+                if (typeof valueChuyenKhoan === 'undefined' || valueChuyenKhoan === null) {
+                    valueChuyenKhoan = "0";
+                }
+                // convert to float
+                let decimalValueChuyenKhoan = parseFloat(valueChuyenKhoan);
+                let decimalValueTienMat = parseFloat(valueTienMat);
+
+                $.ajax({
+                    url: '/Admin/BanTaiQuay/CheckOutMultiPayment',
+                    type: 'POST',
+                    data: {
+                        orderId: orderId,
+                        coinUsed: coinUsed,
+                        voucherValue: voucherValue,
+                        voucherId: voucherIds,
+                        decimalValueChuyenKhoan:decimalValueChuyenKhoan,
+                        decimalValueTienMat: decimalValueTienMat
+                    },
+                    success: function (result) {
+                        if (result.isSuccess) {
+                            if (result.paymentType == "off") {
+                                showToast(result.message, result.isSuccess);
+                                $.ajax({
+                                    url: '/order/ExportPDF',
+                                    type: 'GET',
+                                    data: {
+                                        orderId: orderId,
+
+                                    },
+                                    success: function (result) {
+
+                                    }
+                                });
+                                loadDataUserOrder($("#orderIdInput").val());
+                                resetPaymentInputs();
+                                $("#paymentModal").modal('hide');
+                            }
+                            else {
+                                window.open(result.url, '_blank');
+                            }
+                        } else {
+                            showToast(result.message, false);
+                        }
+                    },
+                    error: function (error) {
+                        showToast("Có lỗi xảy ra, vui lòng thử lại!", false);
+                    }
+
+                });
+            }
+
+        });
+
+    });
+
+
+
+
+</script>
+
